@@ -14,8 +14,7 @@ import { toast } from 'sonner'
 
 export function BulkEditModal({ isOpen, onClose, selectedUsers, onSave }) {
   const [values, setValues] = useState({
-    monthly_profit: '',
-    accumulated_profit: ''
+    monthly_profit: ''
   })
 
   const handleInputChange = (field, value) => {
@@ -34,28 +33,22 @@ export function BulkEditModal({ isOpen, onClose, selectedUsers, onSave }) {
     if (values.monthly_profit !== '') {
       updates.monthly_profit = parseFloat(values.monthly_profit)
     }
-    
-    if (values.accumulated_profit !== '') {
-      updates.accumulated_profit = parseFloat(values.accumulated_profit)
-    }
 
     if (Object.keys(updates).length === 0) {
-      toast.error('Preencha pelo menos um campo para atualizar')
+      toast.error('Preencha o campo de lucro mensal para atualizar')
       return
     }
 
     onSave(updates)
     setValues({
-      monthly_profit: '',
-      accumulated_profit: ''
+      monthly_profit: ''
     })
     onClose()
   }
 
   const handleCancel = () => {
     setValues({
-      monthly_profit: '',
-      accumulated_profit: ''
+      monthly_profit: ''
     })
     onClose()
   }
@@ -67,7 +60,7 @@ export function BulkEditModal({ isOpen, onClose, selectedUsers, onSave }) {
           <DialogTitle>Edição em Massa</DialogTitle>
           <DialogDescription>
             Aplicar valores para {selectedUsers.length} usuário(s) selecionado(s).
-            Deixe em branco os campos que não deseja alterar.
+            O lucro mensal será somado ao valor atual de cada usuário.
           </DialogDescription>
         </DialogHeader>
         
@@ -86,18 +79,9 @@ export function BulkEditModal({ isOpen, onClose, selectedUsers, onSave }) {
             />
           </div>
           
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="accumulated_profit" className="text-right">
-              Lucro Acumulado (%)
-            </Label>
-            <Input
-              id="accumulated_profit"
-              type="text"
-              placeholder="Ex: 15.2"
-              value={values.accumulated_profit}
-              onChange={(e) => handleInputChange('accumulated_profit', e.target.value)}
-              className="col-span-3"
-            />
+          <div className="col-span-4 text-sm text-muted-foreground px-4">
+            <p>💡 <strong>Dica:</strong> O valor inserido será somado ao lucro mensal atual de cada usuário.</p>
+            <p className="mt-2">O saldo será recalculado automaticamente com base no saldo inicial e no novo percentual.</p>
           </div>
         </div>
         
@@ -113,4 +97,3 @@ export function BulkEditModal({ isOpen, onClose, selectedUsers, onSave }) {
     </Dialog>
   )
 }
-

@@ -119,11 +119,7 @@ export const updateMultipleUsersLocal = async (userIds, updates) => {
           updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
         }
         
-        if (updates.accumulated_profit !== undefined) {
-          const currentAccumulatedProfit = currentUser.accumulated_profit || 0
-          const newAccumulatedProfit = parseFloat(updates.accumulated_profit) || 0
-          updatedUser.accumulated_profit = currentAccumulatedProfit + newAccumulatedProfit
-        }
+        // Campo accumulated_profit removido - não é mais utilizado
         
         localUsersData[userIndex] = updatedUser
         results.push(updatedUser)

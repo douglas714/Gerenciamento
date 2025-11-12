@@ -3,15 +3,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Edit, Check, X, DollarSign, TrendingUp, Calculator } from 'lucide-react'
+import { Edit, Check, X, DollarSign, TrendingUp, Wallet, KeyRound } from 'lucide-react'
 import { updateUserLocal } from '@/lib/userService'
 import { toast } from 'sonner'
 
 export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) {
   const [isEditing, setIsEditing] = useState(false)
   const [editValues, setEditValues] = useState({
-    monthly_profit: '',
-    accumulated_profit: ''
+    monthly_profit: ''
   })
   const [isUpdating, setIsUpdating] = useState(false)
 
@@ -26,19 +25,24 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
     return `${(value || 0).toFixed(2)}%`
   }
 
+  // Calcular lucro do mês em reais
+  const calculateMonthlyProfitInReais = () => {
+    const initialBalance = user.initial_balance || user.balance || 1000
+    const monthlyProfitPercent = user.monthly_profit || 0
+    return initialBalance * (monthlyProfitPercent / 100)
+  }
+
   const startEdit = () => {
     setIsEditing(true)
     setEditValues({
-      monthly_profit: '',
-      accumulated_profit: ''
+      monthly_profit: ''
     })
   }
 
   const cancelEdit = () => {
     setIsEditing(false)
     setEditValues({
-      monthly_profit: '',
-      accumulated_profit: ''
+      monthly_profit: ''
     })
   }
 
@@ -61,13 +65,9 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
       if (editValues.monthly_profit !== '') {
         updates.monthly_profit = parseFloat(editValues.monthly_profit)
       }
-      
-      if (editValues.accumulated_profit !== '') {
-        updates.accumulated_profit = parseFloat(editValues.accumulated_profit)
-      }
 
       if (Object.keys(updates).length === 0) {
-        toast.error('Preencha pelo menos um campo para atualizar')
+        toast.error('Preencha o campo de lucro mensal para atualizar')
         return
       }
 
@@ -88,8 +88,7 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
       onUserUpdate(data)
       setIsEditing(false)
       setEditValues({
-        monthly_profit: '',
-        accumulated_profit: ''
+        monthly_profit: ''
       })
     } catch (error) {
       toast.error('Erro inesperado ao atualizar usuário')
@@ -167,7 +166,7 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
             )}
           </div>
 
-          {/* Lucro Mensal */}
+          {/* Lucro Mensal (%) */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-purple-600" />
@@ -193,34 +192,37 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
             )}
           </div>
 
-          {/* Lucro Acumulado */}
+          {/* Lucro do Mês (R$) - NOVO CAMPO */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Calculator className="h-4 w-4 text-orange-600" />
-              <span className="text-sm font-medium">Lucro Acumulado (%)</span>
+              <Wallet className="h-4 w-4 text-blue-600" />
+              <span className="text-sm font-medium">Lucro do Mês (R$)</span>
             </div>
-            {isEditing ? (
-              <div className="space-y-1">
-                <Input
-                  type="text"
-                  placeholder="Porcentagem (ex: 15.2)"
-                  value={editValues.accumulated_profit}
-                  onChange={(e) => handleInputChange('accumulated_profit', e.target.value)}
-                  className="h-8"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Atual: {formatPercentage(user.accumulated_profit)}
-                </p>
-              </div>
-            ) : (
-              <p className="text-lg font-semibold text-orange-600">
-                {formatPercentage(user.accumulated_profit)}
-              </p>
-            )}
+            <p className="text-lg font-semibold text-blue-600">
+              {formatCurrency(calculateMonthlyProfitInReais())}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Rendimento em reais
+            </p>
           </div>
+          
+          {/* CHAVE PIX */}
+          {user.pix_key && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-pink-600" />
+                <span className="text-sm font-medium">CHAVE PIX</span>
+              </div>
+              <p className="text-lg font-semibold text-pink-600 break-all">
+                {user.pix_key}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Para pagamentos
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
   )
 }
-
