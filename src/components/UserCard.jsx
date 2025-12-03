@@ -29,8 +29,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
   const calculateMonthlyProfitInReais = () => {
     const initialBalance = user.initial_balance || user.balance || 1000
     const monthlyProfitPercent = user.monthly_profit || 0
-    // CORREÇÃO APLICADA AQUI: toFixed(2) para garantir 2 casas decimais e parseFloat para manter como número
-    return parseFloat((initialBalance * (monthlyProfitPercent / 100)).toFixed(2))
+    // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
+    return initialBalance * (monthlyProfitPercent / 100)
   }
 
   const startEdit = () => {
@@ -159,7 +159,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
               <span className="text-sm font-medium">Saldo</span>
             </div>
             <p className="text-lg font-semibold text-green-600">
-              {formatCurrency(user.balance)}
+              {/* CORREÇÃO: Aplicado toFixed(2) apenas na exibição */}
+              {formatCurrency(user.balance.toFixed(2))}
             </p>
             {isEditing && (
               <p className="text-xs text-muted-foreground">
@@ -201,7 +202,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
               <span className="text-sm font-medium">Lucro do Mês (R$)</span>
             </div>
             <p className="text-lg font-semibold text-blue-600">
-              {formatCurrency(calculateMonthlyProfitInReais())}
+              {/* CORREÇÃO: Aplicado toFixed(2) apenas na exibição */}
+              {formatCurrency(calculateMonthlyProfitInReais().toFixed(2))}
             </p>
             <p className="text-xs text-muted-foreground">
               Rendimento em reais
