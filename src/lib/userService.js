@@ -62,8 +62,8 @@ export const updateUserLocal = async (userId, updates) => {
       
       // Calcular novo saldo baseado no initial_balance e na porcentagem total
       const initialBalance = currentUser.initial_balance || currentUser.balance || 1000
-      // CORREÇÃO APLICADA AQUI: toFixed(2) para garantir 2 casas decimais e parseFloat para manter como número
-      updatedUser.balance = parseFloat((initialBalance * (1 + updatedUser.monthly_profit / 100)).toFixed(2))
+      // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
+      updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
     }
     
     localUsersData[userIndex] = updatedUser
@@ -117,8 +117,8 @@ export const updateMultipleUsersLocal = async (userIds, updates) => {
           
           // Calcular novo saldo baseado no initial_balance e na porcentagem total
           const initialBalance = currentUser.initial_balance || currentUser.balance || 1000
-          // CORREÇÃO APLICADA AQUI: toFixed(2) para garantir 2 casas decimais e parseFloat para manter como número
-          updatedUser.balance = parseFloat((initialBalance * (1 + updatedUser.monthly_profit / 100)).toFixed(2))
+          // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
+          updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
         }
         
         // Campo accumulated_profit removido - não é mais utilizado
