@@ -29,7 +29,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
   const calculateMonthlyProfitInReais = () => {
     const initialBalance = user.initial_balance || user.balance || 1000
     const monthlyProfitPercent = user.monthly_profit || 0
-    return initialBalance * (monthlyProfitPercent / 100)
+    // CORREÇÃO APLICADA AQUI: toFixed(2) para garantir 2 casas decimais e parseFloat para manter como número
+    return parseFloat((initialBalance * (monthlyProfitPercent / 100)).toFixed(2))
   }
 
   const startEdit = () => {
@@ -74,7 +75,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
       // Calcular novo saldo baseado no lucro mensal
       if (updates.monthly_profit !== undefined) {
         const baseBalance = user.balance || 1000
-        updates.balance = baseBalance * (1 + updates.monthly_profit / 100)
+        // A lógica de cálculo de saldo foi movida para userService.js para ser centralizada
+        // mas o cálculo de saldo é feito dentro do updateUserLocal, então aqui não é necessário
       }
 
       const { data, error } = await updateUserLocal(user.id, updates)
