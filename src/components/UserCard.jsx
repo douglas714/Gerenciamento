@@ -27,10 +27,10 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
 
   // Calcular lucro do mês em reais
   const calculateMonthlyProfitInReais = () => {
-    const initialBalance = user.initial_balance || user.balance || 1000
-    const monthlyProfitPercent = user.monthly_profit || 0
-    // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
-    return initialBalance * (monthlyProfitPercent / 100)
+    const initialBalance = user.initial_balance || 1000
+    const currentBalance = user.balance || 1000
+    // CORREÇÃO: O lucro deve ser a diferença exata entre o saldo atual e o saldo inicial.
+    return currentBalance - initialBalance
   }
 
   const startEdit = () => {
