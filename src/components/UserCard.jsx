@@ -22,7 +22,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
   }
 
   const formatPercentage = (value) => {
-    return `${(value || 0).toFixed(2)}%`
+    // CORREÇÃO: Alterado para exibir 5 casas decimais para maior precisão
+    return `${(value || 0).toFixed(5)}%`
   }
 
   // Calcular lucro do mês em reais
