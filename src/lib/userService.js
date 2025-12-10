@@ -19,10 +19,10 @@ export const getUsers = async () => {
       return { data: null, error }
     }
 
-    // Armazenar dados localmente e garantir que initial_balance esteja definido
+    // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
     localUsersData = data.map(user => ({
       ...user,
-      initial_balance: user.initial_balance || user.balance || 1000
+      initial_balance: user.initial_balance ?? user.balance ?? 1000
     }))
     
     return { data: localUsersData, error: null }
@@ -60,8 +60,8 @@ export const updateUserLocal = async (userId, updates) => {
       const newMonthlyProfit = parseFloat(updates.monthly_profit) || 0
       updatedUser.monthly_profit = currentMonthlyProfit + newMonthlyProfit
       
-      // Calcular novo saldo baseado no initial_balance e na porcentagem total
-      const initialBalance = currentUser.initial_balance || currentUser.balance || 1000
+      // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
+      const initialBalance = currentUser.initial_balance ?? currentUser.balance ?? 1000
       // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
       updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
     }
@@ -115,8 +115,8 @@ export const updateMultipleUsersLocal = async (userIds, updates) => {
           const newMonthlyProfit = parseFloat(updates.monthly_profit) || 0
           updatedUser.monthly_profit = currentMonthlyProfit + newMonthlyProfit
           
-          // Calcular novo saldo baseado no initial_balance e na porcentagem total
-          const initialBalance = currentUser.initial_balance || currentUser.balance || 1000
+          // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
+          const initialBalance = currentUser.initial_balance ?? currentUser.balance ?? 1000
           // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
           updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
         }
@@ -170,7 +170,8 @@ export const syncWithSupabase = async () => {
             monthly_profit: user.monthly_profit,
             accumulated_profit: user.accumulated_profit,
             balance: user.balance,
-            initial_balance: user.initial_balance || user.balance,
+            // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
+            initial_balance: user.initial_balance ?? user.balance,
             updated_at: new Date().toISOString()
           })
           .eq('id', user.id)
