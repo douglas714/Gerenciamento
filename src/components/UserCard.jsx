@@ -28,8 +28,9 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
 
   // Calcular lucro do mês em reais
   const calculateMonthlyProfitInReais = () => {
-    const initialBalance = user.initial_balance || 1000
-    const currentBalance = user.balance || 1000
+    // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
+    const initialBalance = user.initial_balance ?? 1000
+    const currentBalance = user.balance ?? 1000
     // CORREÇÃO: O lucro deve ser a diferença exata entre o saldo atual e o saldo inicial.
     return currentBalance - initialBalance
   }
@@ -75,7 +76,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
 
       // Calcular novo saldo baseado no lucro mensal
       if (updates.monthly_profit !== undefined) {
-        const baseBalance = user.balance || 1000
+        // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
+        const baseBalance = user.balance ?? 1000
         // A lógica de cálculo de saldo foi movida para userService.js para ser centralizada
         // mas o cálculo de saldo é feito dentro do updateUserLocal, então aqui não é necessário
       }
