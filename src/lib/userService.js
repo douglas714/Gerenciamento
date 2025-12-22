@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { useState, useEffect } from 'react'
 
 // Armazenamento local dos dados dos usuários
 let localUsersData = []
@@ -20,9 +21,10 @@ export const getUsers = async () => {
     }
 
     // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
+    // O valor padrão foi alterado de 1000 para 0 para evitar atribuições incorretas
     localUsersData = data.map(user => ({
       ...user,
-      initial_balance: user.initial_balance ?? user.balance ?? 1000
+      initial_balance: user.initial_balance ?? user.balance ?? 0
     }))
     
     return { data: localUsersData, error: null }
@@ -61,7 +63,8 @@ export const updateUserLocal = async (userId, updates) => {
       updatedUser.monthly_profit = currentMonthlyProfit + newMonthlyProfit
       
       // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
-      const initialBalance = currentUser.initial_balance ?? currentUser.balance ?? 1000
+      // O valor padrão foi alterado de 1000 para 0
+      const initialBalance = currentUser.initial_balance ?? currentUser.balance ?? 0
       // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
       updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
     }
@@ -116,7 +119,8 @@ export const updateMultipleUsersLocal = async (userIds, updates) => {
           updatedUser.monthly_profit = currentMonthlyProfit + newMonthlyProfit
           
           // CORREÇÃO: Usar operador de coalescência nula (??) em vez de || para preservar o valor 0
-          const initialBalance = currentUser.initial_balance ?? currentUser.balance ?? 1000
+          // O valor padrão foi alterado de 1000 para 0
+          const initialBalance = currentUser.initial_balance ?? currentUser.balance ?? 0
           // CORREÇÃO: Removido o .toFixed(2) daqui para manter a precisão total no cálculo
           updatedUser.balance = initialBalance * (1 + updatedUser.monthly_profit / 100)
         }
