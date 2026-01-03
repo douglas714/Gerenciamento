@@ -114,7 +114,14 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
             />
             <div>
               <CardTitle className="text-lg">{user.name}</CardTitle>
-              <CardDescription>{user.email}</CardDescription>
+              <CardDescription className="flex flex-col">
+                <span>{user.email}</span>
+                {user['CHAVE PIX'] && (
+                  <span className="text-[10px] text-muted-foreground/70 mt-0.5">
+                    PIX: {user['CHAVE PIX']}
+                  </span>
+                )}
+              </CardDescription>
             </div>
           </div>
           
@@ -213,21 +220,7 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
             </p>
           </div>
           
-          {/* CHAVE PIX */}
-          {user.pix_key && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <KeyRound className="h-4 w-4 text-pink-600" />
-                <span className="text-sm font-medium">CHAVE PIX</span>
-              </div>
-              <p className="text-lg font-semibold text-pink-600 break-all">
-                {user.pix_key}
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Para pagamentos
-              </p>
-            </div>
-          )}
+
         </div>
       </CardContent>
     </Card>
