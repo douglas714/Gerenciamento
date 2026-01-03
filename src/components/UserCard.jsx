@@ -117,7 +117,8 @@ export function UserCard({ user, onUserUpdate, isSelected, onSelectionChange }) 
               <CardDescription className="flex flex-col">
                 <span>{user.email}</span>
                 {user['CHAVE PIX'] && (
-                  <span className="text-[10px] text-muted-foreground/70 mt-0.5">
+                  <span className="text-xs font-medium text-pink-600 mt-1 flex items-center gap-1">
+                    <KeyRound className="h-3 w-3" />
                     PIX: {user['CHAVE PIX']}
                   </span>
                 )}
